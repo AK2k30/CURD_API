@@ -6,6 +6,16 @@ const app = express();
 //middleware
 app.use(express.urlencoded({ extended: false }));
 
+app.use((res, req, next) => {
+    console.log("I am a middleware");
+    req.myUserName= "aka";
+    next();
+});
+
+app.use((req, res, next) => {
+    console.log("I am middleware 2 ", req.myUserName);
+    next();
+});
 
 app.use(express.json());
 
