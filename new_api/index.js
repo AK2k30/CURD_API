@@ -1,6 +1,11 @@
 const express = require("express");
-const users = require("./MOCK_DATA.json")
+const users = require("./MOCK_DATA.json");
+const fs = require("fs");
 const app = express();
+
+//middleware
+app.use(express.urlencoded({ extended: false }));
+
 
 app.use(express.json());
 
@@ -23,8 +28,12 @@ app.route("/api/users/:id").get((res, req) => {
     console.log("delete");
 });
 
-app.post((req, res) => {
-    return res.json({ status : "500"});
+app.post('/api/users', (req, res) => {
+    const body = req.body;
+    users.push({...body, id: users.length + 1});
+    fs.writeFile('./MOCK_DATA.json', JSON.stringify(users), (err, data) => {
+        return res.json({ status : "success", id: users.length });
+    });
 });
 
 //Routes
